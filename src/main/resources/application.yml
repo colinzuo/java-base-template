@@ -1,0 +1,15 @@
+logging:
+  file:
+    name: baseTemplate
+
+spring:
+  application:
+    base-template
+  flyway:
+    locations: classpath:db/migration/{vendor}
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:com.example.basetemplate.mapper/*.xml
+  type-aliases-package: com.example.basetemplate.model.po

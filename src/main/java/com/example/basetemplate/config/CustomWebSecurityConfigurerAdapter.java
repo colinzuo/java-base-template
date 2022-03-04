@@ -1,12 +1,18 @@
 package com.example.basetemplate.config;
 
+import com.example.basetemplate.security.CustomAuthenticationFilter;
+import com.example.basetemplate.security.CustomAuthenticationProvider;
 import com.example.basetemplate.security.CustomBearerTokenFilter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.DefaultLoginPageConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -27,13 +33,30 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
 		http.removeConfigurer(DefaultLoginPageConfigurer.class);
 
 		http.addFilterBefore(
-				new CustomBearerTokenFilter(), BasicAuthenticationFilter.class);
+				customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//		http.addFilterBefore(
+//				new CustomBearerTokenFilter(), BasicAuthenticationFilter.class);
 
 		http.cors(withDefaults());
 
 		http.authorizeHttpRequests()
 				.mvcMatchers("/actuator/**").permitAll()
 				.anyRequest().permitAll();
+	}
+
+	public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+		return new CustomAuthenticationFilter(authenticationManagerBean());
+	}
+
+	@Bean(name="authenticationManager")
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(customAuthenticationProvider());
 	}
 
 	@Bean
@@ -44,5 +67,9 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
+	}
+
+	private CustomAuthenticationProvider customAuthenticationProvider() {
+		return new CustomAuthenticationProvider();
 	}
 }
