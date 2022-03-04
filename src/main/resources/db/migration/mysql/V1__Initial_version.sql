@@ -11,40 +11,36 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE roles (
-    id BIGINT NOT NULL AUTO_INCREMENT,
+    id BIGINT NOT NULL AUTO_INCREMENT primary key,
 
     name VARCHAR(128) NOT NULL,
 
-    constraint pk_roles primary key (id),
     constraint uc_roles unique (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE permissions (
-    id BIGINT NOT NULL AUTO_INCREMENT,
+    id BIGINT NOT NULL AUTO_INCREMENT primary key,
 
     name VARCHAR(128) NOT NULL,
 
-    constraint pk_permissions primary key (id),
     constraint uc_permissions unique (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE user_roles (
-    id BIGINT NOT NULL AUTO_INCREMENT,
+    id BIGINT NOT NULL AUTO_INCREMENT primary key,
 
     user_id BIGINT NOT NULL,
     role_id BIGINT NOT NULL,
 
-    constraint pk_user_roles primary key (id),
     constraint uc_user_roles unique (user_id, role_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE user_permissions (
-    id BIGINT NOT NULL AUTO_INCREMENT,
+    id BIGINT NOT NULL AUTO_INCREMENT primary key,
 
     user_id BIGINT NOT NULL,
     permission_id BIGINT NOT NULL,
 
-    constraint pk_user_permissions primary key (id),
     constraint uc_user_permissions unique (user_id, permission_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

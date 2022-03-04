@@ -5,6 +5,17 @@ logging:
 spring:
   application:
     base-template
+  datasource:
+    connectionTimeout: 1000
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      autoCommit: true
+      maximumPoolSize: 10
+      minimumIdle: 2
+    password: brysjhhrhl!
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://172.16.23.70:3306/basetemplate_prototype?serverTimezone=GMT
+    username: basetemplate
   flyway:
     locations: classpath:db/migration/{vendor}
 
